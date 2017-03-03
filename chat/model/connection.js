@@ -6,18 +6,25 @@ var connection = mysql.createConnection({
 	database: 'calendar'
 });
 
-// connection.query(
-// 	INSERT INTO events (id_grp, dt_start, dt_end, name, color) VALUES 
-// 	(answer.id_grp, answer.dt_start, answer.dt_end, answer.name, answer.color),
-// 	function (error, results, fields) 
-// 	{
-// 		if (error) throw error;
-// 	});
+
+// var text = {
+// 	list: function (callback) {
+// 		connection.query('SELECT * FROM events', callback);
+// 	},
+
+
+// 	add: function (text, callback) {
+// 		connection.query('INSERT INTO events SET ?', answer, callback);
+// 	}
+// };
 
 exports.end = function () {
 	connection.end();
 }
 
+
+
 module.exports = connection;
+
 
 

@@ -11,7 +11,6 @@
         this.dayWeekFirst = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();
         this.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         this.week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        this.num = 0;
     }
 
     CreatMonth.prototype.render = function () {
@@ -37,7 +36,7 @@
         currentCal.appendChild(month);
         currentCal.appendChild(year);
 
-        calendar.classList.add('calendar');
+        calendar.setAttribute('class', 'calendar col-6 offset-1');
 
         last.setAttribute('class', 'fa fa-angle-left col-3 lastMonth');
         next.setAttribute('class', 'fa fa-angle-right col-3 nextMonth');
@@ -68,32 +67,23 @@
                 days.appendChild(div);
                 div.classList.add('day');
                 div.setAttribute('id', 'null');
-                this.num += 1;
             }
         }
 
-        //генерит дни
+        //Генерация календаря
         for (var i = 1; i <= this.dateLastDay; i++) {
-            var div1 = document.createElement('div');
-            var div = document.createElement('div');
-            var a = document.createElement('a');
-            var p = document.createElement('p');
-            var n = i;
-            var m = 1 + this.month;
+
+            var div1 = document.createElement('div'),
+                div = document.createElement('div'),
+                p = document.createElement('p');
+
             div.classList.add('days');
             div1.classList.add('day');
             p.setAttribute('id', i);
             div.innerHTML = i;
-            days.appendChild(a);
-            days.appendChild(a);
-            a.appendChild(div1);
+            days.appendChild(div1);
             div1.appendChild(div);
             div1.appendChild(p);
-
-            a.setAttribute('href', '#');
-            a.setAttribute('data-toggle', 'modal');
-            a.setAttribute('data-target', '#myModal');
-            this.num += 1;
 
             if (i === new Date().getDate() && this.date.getMonth() === new Date().getMonth() && this.date.getFullYear() === new Date().getFullYear()) {
                 div1.classList.add('today', 'day');
@@ -138,24 +128,52 @@
     newMonth = new CreatMonth();
     newMonth.render();
 
+    clean.onclick = function creatData() {
+        document.getElementById('dt_star').value = '';
+        document.getElementById('dt_end').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('color').value = "#000000";
+    };
 
 
-    var socket = io.connect('http://localhost:3000/');
+    ///Получение данных из формы через ajax
+    $("form").submit(function (e) {
+        e.preventDefault();
+        var adminform = document.forms["adminform"],
+            id_grp = document.getElementById('id_grp').value,
+            dt_start = document.getElementById('dt_start').value,
+            dt_end = document.getElementById('dt_end').value,
+            name = document.getElementById('name').value,
+            color = document.getElementById('color').value;
 
-
-    socket.on("newEvent", function (answer) {
-
-        var ds = new Date(answer.dt_start);
-        var de = new Date(answer.dt_end);
-
-        for (var j = ds.getDate(); j <= de.getDate(); j++) {
-            var a = document.getElementById(j);
-            a.innerHTML = answer.name;
-            a.style.background = answer.color;
-        };
-
+        $.ajax({
+            type: "POST",
+            url: "/user",
+            data: JSON.stringify({ id_grp: id_grp, dt_start: dt_start, dt_end: dt_end, name: name, color: color }),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+            },
+        });
     });
 
+
+
+    // var socket = io.connect();
+    //socket.on("newEvent", function (answer) {
+    //  console.log(answer);
+
+    // var ds = new Date(answer.dt_start);
+    // var de = new Date(answer.dt_end);
+
+    // for (var j = ds.getDate(); j <= de.getDate(); j++) {
+    //     var a = document.getElementById(j);
+    //     a.innerHTML = answer.name;
+    //     a.style.background = answer.color;
+    // };
+
+    // });
 
 
 }(window));

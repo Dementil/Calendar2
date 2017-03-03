@@ -14,6 +14,8 @@ body {
     font-size: 1.6rem;
     margin: 0;
     padding: 0;
+    background: #ADFF2F;
+    color: #000080;
 
 }
 
@@ -25,27 +27,28 @@ body {
     box-sizing: border-box;
     height: 800px;
     width: 700px;
-    margin: 0 auto;
-}
-.grid{
-    background: #818181;
-    height: 600px;
 }
 
-.calendar .day{
+.grid{
+    height: 600px;
+    color: #F0E68C;
+}
+
+.day{
     float: left;
     width: 9.6rem;
     height: 9.6rem;
     box-sizing: border-box;
-    border: 1px solid silver;
+    border: 1px solid #556B2F;
     margin: 0.2rem;
-  
     overflow: hidden;
-    background: #F3F3F3;
+    background: #98FB98;
 }
 
-.today {
-    color: red;
+
+.today .days {
+    background: #800000;
+    font-weight: bold;
 }
 
 .calMenu{
@@ -59,6 +62,7 @@ body {
     float: left;
     height: 100%;
     padding: 1rem 0;
+    font-weight: bold;
 }
 .nextMonth, .lastMonth{
     height: 100%;
@@ -74,6 +78,7 @@ body {
     box-sizing: border-box;
     text-align: center;
     font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .daysWeek{
@@ -84,7 +89,7 @@ body {
 }
 .days{
     width: 100%;
-    background: #B5B5B5;
+    background: #006400;
     overflow: hidden;
     padding-top: 0.5rem;
     padding-left: 0.5rem;
@@ -94,28 +99,20 @@ body {
     visibility: hidden;
 }
 
-.newTask{
-    position: absolute;
-    height: 100px;
-    width: 200px;
-    background: #565656;
-    border-radius: 5px;
-    top: 19rem;
-    left: 59.4rem;
-}
-.task{
-    font-size: 1rem;
-    color: cornflowerblue;
-    position: relative;
-}
-.close{
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 1.5rem;
-}
-.close:hover{
-    font-size: 3rem;
-    color: red;
+.fa:hover{
+    color: #800080;
+    font-weight: bold;
+    font-size: 3.5rem;
 }
 
+.header{
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 0.5px solid #FFFFFF;
+}
+
+footer{
+    background: #006400;
+    color: #F0E68C;
+    font-weight: bold;
+}

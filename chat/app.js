@@ -1,6 +1,6 @@
-var app = require('express')()
-	, server = require('http').createServer(app)
-	, io = require('socket.io').listen(server);
+var app = require('express')(),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server);
 
 var express = require('express');
 var mysql = require('mysql');
@@ -12,7 +12,8 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var connection = require('./model/connection');
 var fs = require('fs');
-connection.connect();
+
+
 
 app.use('/', routes);
 
@@ -26,38 +27,50 @@ app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index');
 });
 
-var answer;
 
-// получение данных из формы через POST запрос
-app.route('/adminform')
-	.get(function (req, res) {
-		res.render('adminform', {
-		})
-	})
-	.post(function (req, res) {
-		answer = req.body;
-
-		connection.query('INSERT INTO events SET ?', answer,
-			function (error, answer, fields) {
-				if (error) throw error;
-			});
-
-		connection.query('SELECT * FROM events',
-			function (err, answer, fields) {
-				if (answer.length === 0)
-					res.redirect('/');
-			});
-
-		res.redirect('/');
-		res.end();
-	});
-
-
-io.on('connection', function (socket) {
-	socket.emit("newEvent", answer);
+connection.connect(function (err) {
+	if (err) {
+		console.error('error connecting: ' + err.stack);
+		return;
+	}
+	console.log('connected as id ' + connection.threadId);
 });
 
 
+// app.get('/', function (req, res) {
+
+// 	connection.query('SELECT * FROM events', function (err, rows, fields) {
+// 		if (err) throw err;
+// 		Console.log(rows);
+
+// 	});
+// });
+
+
+// Получение данных из формы через ajax
+app.post("/user", jsonParser, function (request, response) {
+	if (!request.body) return response.sendStatus(400);
+	response.json(request.body);
+	var answer = request.body;
+	connection.query('INSERT INTO events SET ?', answer,
+		function (error, rows, fields) {
+			if (error) throw error;
+		})
+});
+
+
+// io.on('connection', function (socket) {
+// 	socket.emit("newEvent", answer);
+// });
+
+
+
+//  io.sockets.on('connection', function (socket) {
+//   socket.emit('news', { hello: 'world' });
+//   socket.on('my other event', function (data) {
+//     console.log(data);
+//   });
+//  });
 
 server.listen(port);
 console.log('Listening on port ' + port);
