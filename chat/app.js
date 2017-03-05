@@ -37,18 +37,8 @@ connection.connect(function (err) {
 });
 
 
-// app.get('/', function (req, res) {
-
-// 	connection.query('SELECT * FROM events', function (err, rows, fields) {
-// 		if (err) throw err;
-// 		Console.log(rows);
-
-// 	});
-// });
-
-
 // Получение данных из формы через ajax
-app.post("/user", jsonParser, function (request, response) {
+app.post("/", jsonParser, function (request, response) {
 	if (!request.body) return response.sendStatus(400);
 	response.json(request.body);
 	var answer = request.body;
@@ -59,18 +49,16 @@ app.post("/user", jsonParser, function (request, response) {
 });
 
 
-// io.on('connection', function (socket) {
-// 	socket.emit("newEvent", answer);
-// });
+io.on('connection', function (socket) {
+	socket.on('getEvents', function (data) {
+		connection.query('SELECT * FROM events', function (err, rows, fields) {
+			if (err) throw err;
+			//console.log(rows);
+			socket.emit("newEvent", rows);
+		});
+	});
+});
 
-
-
-//  io.sockets.on('connection', function (socket) {
-//   socket.emit('news', { hello: 'world' });
-//   socket.on('my other event', function (data) {
-//     console.log(data);
-//   });
-//  });
 
 server.listen(port);
 console.log('Listening on port ' + port);

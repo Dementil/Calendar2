@@ -19,14 +19,18 @@ body {
 
 }
 
+h1{
+    font-weight: bold;
+}
+
 #wrapper{
     box-sizing: border-box;
 }
 
 .calendar{
     box-sizing: border-box;
-    height: 800px;
-    width: 700px;
+    height: 1300px;
+    width: 1100px;
 }
 
 .grid{
@@ -36,8 +40,8 @@ body {
 
 .day{
     float: left;
-    width: 9.6rem;
-    height: 9.6rem;
+    width: 148px;
+    height: 148px;
     box-sizing: border-box;
     border: 1px solid #556B2F;
     margin: 0.2rem;
@@ -62,8 +66,10 @@ body {
     float: left;
     height: 100%;
     padding: 1rem 0;
+    font-size: 1.6em;
     font-weight: bold;
 }
+
 .nextMonth, .lastMonth{
     height: 100%;
     padding: 1rem 0;
@@ -72,7 +78,7 @@ body {
 
 .weekDay{
     float: left;
-    width: 10rem;
+    width: 150px;
     height: 1rem;
     padding: 1rem;
     box-sizing: border-box;

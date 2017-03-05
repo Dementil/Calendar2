@@ -76,10 +76,11 @@
             var div1 = document.createElement('div'),
                 div = document.createElement('div'),
                 p = document.createElement('p');
+            var idDate = new Date(this.date.getFullYear(), this.date.getMonth(), i);
 
             div.classList.add('days');
             div1.classList.add('day');
-            p.setAttribute('id', i);
+            p.setAttribute('id', idDate);
             div.innerHTML = i;
             days.appendChild(div1);
             div1.appendChild(div);
@@ -101,6 +102,7 @@
         var parent = document.getElementById('wrapper');
         var calendar = document.querySelector('.calendar');
         calendar.addEventListener('click', function (event) {
+            socket.emit('getEvents', function (data) { });
             that.num = 0;
             if (event.target.id === 'last') {
                 that.date = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
@@ -121,20 +123,13 @@
                 that.render();
 
             }
+
         });
     };
 
 
     newMonth = new CreatMonth();
     newMonth.render();
-
-    clean.onclick = function creatData() {
-        document.getElementById('dt_star').value = '';
-        document.getElementById('dt_end').value = '';
-        document.getElementById('name').value = '';
-        document.getElementById('color').value = "#000000";
-    };
-
 
     ///Получение данных из формы через ajax
     $("form").submit(function (e) {
@@ -148,32 +143,52 @@
 
         $.ajax({
             type: "POST",
-            url: "/user",
+            url: "/",
             data: JSON.stringify({ id_grp: id_grp, dt_start: dt_start, dt_end: dt_end, name: name, color: color }),
             dataType: "json",
             contentType: "application/json",
             success: function (data) {
                 console.log(data);
+                socket.emit('getEvents', function (data) { });
             },
         });
     });
 
 
 
-    // var socket = io.connect();
-    //socket.on("newEvent", function (answer) {
-    //  console.log(answer);
+    var socket = io.connect('http://localhost:3000/');
+    socket.emit('getEvents', function (data) {
+        //console.log(rows);
+    });
+    socket.on("newEvent", function (rows) {
+        console.log(rows);
 
-    // var ds = new Date(answer.dt_start);
-    // var de = new Date(answer.dt_end);
+        for (var i = 0; i < rows.length; i++) {
+            var obj = rows[i];
 
-    // for (var j = ds.getDate(); j <= de.getDate(); j++) {
-    //     var a = document.getElementById(j);
-    //     a.innerHTML = answer.name;
-    //     a.style.background = answer.color;
-    // };
+            var ds = new Date(obj.dt_start);
+            var de = new Date(obj.dt_end);
 
-    // });
+            for (var j = ds.getDate(); j <= de.getDate(); j++) {
+                var eventDay = new Date(ds.getFullYear(), ds.getMonth(), j);
+                //console.log(eventDay);
+                var pText;
+                //console.log(pText);
+                var p1 = document.createElement('p');
+                if (pText = document.getElementById(eventDay)) {
+                    pText.appendChild(p1);
+                    var text = document.createTextNode(obj.name);
+                    p1.appendChild(text);
+                    p1.style.background = obj.color;
+                };
+            };
+        };
+    });
 
-
+    clean.onclick = function cleanData() {
+        document.getElementById('dt_start').value = '';
+        document.getElementById('dt_end').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('color').value = "#000000";
+    };
 }(window));
