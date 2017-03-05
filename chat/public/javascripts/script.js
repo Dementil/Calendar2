@@ -102,7 +102,7 @@
         var parent = document.getElementById('wrapper');
         var calendar = document.querySelector('.calendar');
         calendar.addEventListener('click', function (event) {
-            socket.emit('getEvents', function (data) { });
+            
             that.num = 0;
             if (event.target.id === 'last') {
                 that.date = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
@@ -112,6 +112,7 @@
                 parent.removeChild(calendar);
                 that.month = that.date.getMonth();
                 that.render();
+                socket.emit('getEvents', function (data) { });
 
             } else if (event.target.id === 'next') {
                 that.date = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
@@ -121,6 +122,7 @@
                 parent.removeChild(calendar);
                 that.month = that.date.getMonth();
                 that.render();
+                socket.emit('getEvents', function (data) { });
 
             }
 
